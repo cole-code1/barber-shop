@@ -1,26 +1,34 @@
 import { siteConfig } from "../data/siteConfig";
+import { getCloudinaryImage } from "../utils/cloudinary";
 
 export default function Services() {
+  const { cloudName, images } = siteConfig.cloudinary;
+
   return (
     <section className="py-12 bg-gray-100">
-      <h2 className="text-center text-3xl font-bold">Services</h2>
-      <div className="flex flex-wrap justify-center gap-6 mt-8">
-        {siteConfig.services.map((s, i) => (
-          <div
-            key={i}
-            className="bg-white p-6 shadow-lg rounded-lg w-60 text-center"
-          >
-            <h3 className="text-2xl font-medium">{s.title}</h3>
-            {/* image */}
-            <img
-              src={s.image}
-              alt={s.title}
-              className="w-full h-40 object-cover mt-4 rounded"
-            />
+      <h2 className="text-3xl font-bold text-center">Services</h2>
 
-            <p className="mt-2 text-lg">{s.price}</p>
-          </div>
-        ))}
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 px-4">
+        {siteConfig.services.map((service, i) => {
+          const imageUrl = getCloudinaryImage(
+            cloudName,
+            images[service.imageKey]
+          );
+
+          return (
+            <div key={i} className="bg-white rounded shadow">
+              <img
+                src={imageUrl}
+                alt={service.title}
+                className="h-40 w-full object-cover rounded-t"
+              />
+              <div className="p-4 text-center">
+                <h3 className="font-bold">{service.title}</h3>
+                <p className="text-sm">{service.price}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
